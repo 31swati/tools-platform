@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Code, Calculator, Palette, Search, TrendingUp, Zap } from "lucide-react"
+import type { Metadata } from "next";
 
 const toolCategories = [
   {
@@ -101,3 +102,30 @@ export default function HomePage() {
     </div>
   )
 }
+
+export const metadata: Metadata = {
+  title: "ToggleTools – Smart Tools for Everyday Productivity",
+  description: "ToggleTools helps you manage tasks, projects, and productivity with modern, easy-to-use online tools.",
+  keywords: ["ToggleTools", "productivity tools", "task management", "online tools"],
+  openGraph: {
+    title: "ToggleTools – Smart Tools for Everyday Productivity",
+    description: "Discover ToggleTools: a modern suite of tools for projects, tasks, and productivity.",
+    url: "https://www.toggletools.com",
+    siteName: "ToggleTools",
+    images: [
+      {
+        url: "https://www.toggletools.com/og-image.png", // we can add this later
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ToggleTools – Smart Tools for Everyday Productivity",
+    description: "Discover ToggleTools: a modern suite of tools for projects, tasks, and productivity.",
+    images: ["https://www.toggletools.com/og-image.png"],
+  },
+};
