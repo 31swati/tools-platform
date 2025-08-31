@@ -13,6 +13,35 @@ import {
   Building,
 } from "lucide-react"
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Finance Tools – ToggleTools",
+  description:
+    "Free online finance tools by ToggleTools. Calculate SIP returns, manage budgets, and explore financial calculators for smarter decisions.",
+  keywords: [
+    "finance tools",
+    "SIP calculator",
+    "budget calculator",
+    "financial planning",
+    "ToggleTools"
+  ],
+  openGraph: {
+    title: "Finance Tools – ToggleTools",
+    description:
+      "Explore free finance tools like SIP calculator and budgeting helpers. Make smarter financial decisions with ToggleTools.",
+    url: "https://www.toggletools.com/finance-tools",
+    siteName: "ToggleTools",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Finance Tools – ToggleTools",
+    description:
+      "Free online finance calculators including SIP calculator and budget tools.",
+  },
+};
+
 const financeTools = [
   {
     title: "SIP Calculator",
@@ -20,6 +49,7 @@ const financeTools = [
     icon: TrendingUp,
     href: "/finance-tools/sip-calculator",
     gradient: "from-green-500 to-emerald-500",
+    active: true,
   },
   {
     title: "Lumpsum Calculator",
@@ -27,6 +57,7 @@ const financeTools = [
     icon: DollarSign,
     href: "/finance-tools/lumpsum-calculator",
     gradient: "from-blue-500 to-cyan-500",
+    active: false,
   },
   {
     title: "EMI Calculator",
@@ -34,6 +65,7 @@ const financeTools = [
     icon: CreditCard,
     href: "/finance-tools/emi-calculator",
     gradient: "from-purple-500 to-pink-500",
+    active: false,
   },
   {
     title: "Compound Interest",
@@ -41,6 +73,7 @@ const financeTools = [
     icon: BarChart3,
     href: "/finance-tools/compound-interest",
     gradient: "from-orange-500 to-red-500",
+    active: false,
   },
   {
     title: "Investment Tracker",
@@ -48,6 +81,7 @@ const financeTools = [
     icon: PieChart,
     href: "/finance-tools/investment-tracker",
     gradient: "from-indigo-500 to-blue-500",
+    active: false,
   },
   {
     title: "Budget Planner",
@@ -55,6 +89,7 @@ const financeTools = [
     icon: Wallet,
     href: "/finance-tools/budget-planner",
     gradient: "from-yellow-500 to-orange-500",
+    active: false,
   },
   {
     title: "Tax Calculator",
@@ -62,6 +97,7 @@ const financeTools = [
     icon: Calculator,
     href: "/finance-tools/tax-calculator",
     gradient: "from-teal-500 to-cyan-500",
+    active: false,
   },
   {
     title: "Retirement Planner",
@@ -69,6 +105,7 @@ const financeTools = [
     icon: Target,
     href: "/finance-tools/retirement-planner",
     gradient: "from-rose-500 to-pink-500",
+    active: false,
   },
   {
     title: "Mortgage Calculator",
@@ -76,8 +113,12 @@ const financeTools = [
     icon: Building,
     href: "/finance-tools/mortgage-calculator",
     gradient: "from-violet-500 to-purple-500",
+    active: false,
   },
 ]
+
+// Put active tools first
+const sortedTools = [...financeTools].sort((a, b) => (a.active === b.active ? 0 : a.active ? -1 : 1))
 
 export default function FinanceToolsPage() {
   return (
@@ -106,28 +147,53 @@ export default function FinanceToolsPage() {
 
         <main className="container mx-auto px-6 pb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {financeTools.map((tool) => {
-              const IconComponent = tool.icon
-              return (
-                <Link key={tool.title} href={tool.href} className="group">
-                  <Card className="h-full transition-all duration-300 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 border-2 hover:border-accent/50 bg-card/80 backdrop-blur-sm">
-                    <CardHeader className="text-center pb-4">
-                      <div
-                        className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${tool.gradient} p-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                      >
-                        <IconComponent className="w-full h-full text-white" />
-                      </div>
-                      <CardTitle className="font-serif font-black text-2xl group-hover:text-accent transition-colors duration-300">
-                        {tool.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <CardDescription className="text-base leading-relaxed">{tool.description}</CardDescription>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )
-            })}
+          {sortedTools.map((tool) => {
+            const IconComponent = tool.icon
+
+            const cardContent = (
+              <Card
+                className={`relative h-full transition-all duration-300 ${
+                  tool.active
+                    ? "hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 border-2 hover:border-accent/50 cursor-pointer"
+                    : "opacity-60 cursor-not-allowed"
+                } bg-card/80 backdrop-blur-sm`}
+              >
+                <CardHeader className="text-center pb-4">
+                  <div
+                    className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${tool.gradient} p-4 ${
+                      tool.active ? "group-hover:scale-110 transition-transform duration-300 shadow-lg" : ""
+                    }`}
+                  >
+                    <IconComponent className="w-full h-full text-white" />
+                  </div>
+                  <CardTitle className="font-serif font-black text-2xl group-hover:text-accent transition-colors duration-300">
+                    {tool.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <CardDescription className="text-base leading-relaxed">{tool.description}</CardDescription>
+                </CardContent>
+
+                {/* Coming soon overlay */}
+                {!tool.active && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-2xl text-white text-lg font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    🚧 Coming Soon
+                  </div>
+                )}
+              </Card>
+            )
+
+            return tool.active ? (
+              <Link key={tool.title} href={tool.href} className="group">
+                {cardContent}
+              </Link>
+            ) : (
+              <div key={tool.title} className="group">
+                {cardContent}
+              </div>
+            )
+          })}
+
           </div>
         </main>
       </div>

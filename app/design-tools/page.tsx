@@ -1,120 +1,138 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Palette, Pipette, ImageIcon, Type, Layers, Zap, Paintbrush, Grid3X3 } from "lucide-react"
+import { ArrowLeft, Palette, Droplet, Image as ImageIcon } from "lucide-react"
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Design Tools – ToggleTools",
+  description:
+    "Free design tools by ToggleTools. Pick colors, generate palettes, resize images, and explore resources for designers.",
+  keywords: [
+    "design tools",
+    "color picker",
+    "color palettes",
+    "image resizer",
+    "UI tools",
+    "ToggleTools"
+  ],
+  openGraph: {
+    title: "Design Tools – ToggleTools",
+    description:
+      "Explore free online design tools: color picker, palette generator, image resizer, and more.",
+    url: "https://www.toggletools.com/design-tools",
+    siteName: "ToggleTools",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Design Tools – ToggleTools",
+    description:
+      "Free design tools including color picker, palette generator, and image resizer.",
+  },
+};
 
 const designTools = [
   {
-    title: "Color Palettes",
-    description: "Generate beautiful color schemes and palettes",
-    icon: Palette,
-    href: "/design-tools/color-palettes",
-    gradient: "from-purple-500 to-pink-500",
+    title: "Color Picker",
+    description: "Pick and copy colors in multiple formats",
+    icon: Droplet,
+    href: "/design-tools/color-picker",
+    gradient: "from-pink-500 to-rose-500",
+    active: true,
   },
   {
-    title: "Color Picker",
-    description: "Pick colors from images and generate codes",
-    icon: Pipette,
-    href: "/design-tools/color-picker",
-    gradient: "from-blue-500 to-cyan-500",
+    title: "Color Palettes",
+    description: "Generate and explore color palettes",
+    icon: Palette,
+    href: "/design-tools/color-palettes",
+    gradient: "from-indigo-500 to-violet-500",
+    active: true,
   },
   {
     title: "Image Resizer",
-    description: "Resize images while maintaining quality",
+    description: "Resize images online quickly",
     icon: ImageIcon,
     href: "/design-tools/image-resizer",
-    gradient: "from-green-500 to-emerald-500",
-  },
-  {
-    title: "Format Converter",
-    description: "Convert between PNG, JPG, WebP, and more",
-    icon: ImageIcon,
-    href: "/design-tools/format-converter",
-    gradient: "from-orange-500 to-red-500",
-  },
-  {
-    title: "Typography Tool",
-    description: "Font pairing and typography generator",
-    icon: Type,
-    href: "/design-tools/typography-tool",
-    gradient: "from-indigo-500 to-blue-500",
-  },
-  {
-    title: "Gradient Generator",
-    description: "Create beautiful CSS gradients",
-    icon: Paintbrush,
-    href: "/design-tools/gradient-generator",
-    gradient: "from-yellow-500 to-orange-500",
-  },
-  {
-    title: "Icon Generator",
-    description: "Create and customize SVG icons",
-    icon: Zap,
-    href: "/design-tools/icon-generator",
     gradient: "from-teal-500 to-cyan-500",
+    active: true,
   },
   {
-    title: "Layout Grid",
-    description: "CSS Grid and Flexbox layout generator",
-    icon: Grid3X3,
-    href: "/design-tools/layout-grid",
-    gradient: "from-rose-500 to-pink-500",
-  },
-  {
-    title: "Shadow Generator",
-    description: "Create CSS box shadows and effects",
-    icon: Layers,
-    href: "/design-tools/shadow-generator",
-    gradient: "from-violet-500 to-purple-500",
+    title: "Logo Maker",
+    description: "Create simple logos online",
+    icon: Palette,
+    href: "/design-tools/logo-maker",
+    gradient: "from-yellow-500 to-orange-500",
+    active: false,
   },
 ]
+
+const sortedTools = [...designTools].sort((a, b) => (a.active === b.active ? 0 : a.active ? -1 : 1))
 
 export default function DesignToolsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-accent/10">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(8,145,178,0.05)_25%,rgba(8,145,178,0.05)_50%,transparent_50%,transparent_75%,rgba(8,145,178,0.05)_75%)] bg-[length:60px_60px] pointer-events-none" />
-
       <div className="relative z-10">
         <header className="container mx-auto px-6 py-12">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors duration-300 mb-8 group"
-          >
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors duration-300 mb-8 group">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
             Back to Tools
           </Link>
           <div className="text-center">
-            <h1 className="font-serif font-black text-5xl md:text-6xl mb-6 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+            <h1 className="font-serif font-black text-5xl md:text-6xl mb-6 bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 bg-clip-text text-transparent">
               Design Tools
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Color palettes, typography, and creative resources for designers
+              Free online tools for designers: color picker, palettes, and image resizer.
             </p>
           </div>
         </header>
 
         <main className="container mx-auto px-6 pb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {designTools.map((tool) => {
+            {sortedTools.map((tool) => {
               const IconComponent = tool.icon
-              return (
+              const cardContent = (
+                <Card
+                  className={`relative h-full transition-all duration-300 ${
+                    tool.active
+                      ? "hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 border-2 hover:border-accent/50 cursor-pointer"
+                      : "opacity-60 cursor-not-allowed"
+                  } bg-card/80 backdrop-blur-sm`}
+                >
+                  <CardHeader className="text-center pb-4">
+                    <div
+                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${tool.gradient} p-4 ${
+                        tool.active ? "group-hover:scale-110 transition-transform duration-300 shadow-lg" : ""
+                      }`}
+                    >
+                      <IconComponent className="w-full h-full text-white" />
+                    </div>
+                    <CardTitle className="font-serif font-black text-2xl group-hover:text-accent transition-colors duration-300">
+                      {tool.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <CardDescription className="text-base leading-relaxed">{tool.description}</CardDescription>
+                  </CardContent>
+
+                  {/* Coming soon overlay */}
+                  {!tool.active && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-2xl text-white text-lg font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300">
+                      🚧 Coming Soon
+                    </div>
+                  )}
+                </Card>
+              )
+
+              return tool.active ? (
                 <Link key={tool.title} href={tool.href} className="group">
-                  <Card className="h-full transition-all duration-300 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 border-2 hover:border-accent/50 bg-card/80 backdrop-blur-sm">
-                    <CardHeader className="text-center pb-4">
-                      <div
-                        className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${tool.gradient} p-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
-                      >
-                        <IconComponent className="w-full h-full text-white" />
-                      </div>
-                      <CardTitle className="font-serif font-black text-2xl group-hover:text-accent transition-colors duration-300">
-                        {tool.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <CardDescription className="text-base leading-relaxed">{tool.description}</CardDescription>
-                    </CardContent>
-                  </Card>
+                  {cardContent}
                 </Link>
+              ) : (
+                <div key={tool.title} className="group">
+                  {cardContent}
+                </div>
               )
             })}
           </div>
