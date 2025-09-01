@@ -84,12 +84,12 @@ const financeTools = [
     active: false,
   },
   {
-    title: "Budget Planner",
-    description: "Plan and track monthly expenses",
+    title: "Expense Tracker - Web",
+    description: "Plan and track monthly expenses on your computer",
     icon: Wallet,
-    href: "/finance-tools/budget-planner",
+    href: "/finance-tools/expense-tracker",
     gradient: "from-yellow-500 to-orange-500",
-    active: false,
+    active: true,
   },
   {
     title: "Tax Calculator",
