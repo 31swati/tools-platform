@@ -13,7 +13,7 @@ import { emojiFor } from "@/lib/emoji"
 import { toISODate } from "@/lib/date"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Plus } from "lucide-react"
 
 type Props = {
   editing?: Expense | null
@@ -49,7 +49,6 @@ export function ExpenseForm({ editing, onDone }: Props) {
   }, [views, viewId])
 
   React.useEffect(() => {
-    // auto-pick first category in view
     const cats = categories.filter((c) => c.viewId === viewId)
     if (cats.length > 0 && !cats.some((c) => c.id === categoryId)) {
       setCategoryId(cats[0].id)
@@ -96,7 +95,12 @@ export function ExpenseForm({ editing, onDone }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)}>Add Expense</Button>
+        <Button
+          onClick={() => setOpen(true)}
+          className="rounded-full px-6 py-3 text-lg flex items-center gap-2 shadow-lg bg-primary text-white hover:bg-primary/90"
+        >
+          <Plus className="w-5 h-5" /> Add Expense
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -170,7 +174,7 @@ export function ExpenseForm({ editing, onDone }: Props) {
                   onSelect={(d) => {
                     if (d) {
                       setDate(toISODate(d))
-                      setDateOpen(false) // auto-close after selecting
+                      setDateOpen(false)
                     }
                   }}
                   initialFocus

@@ -29,6 +29,7 @@ export function ExpenseTable({ range, onEdit }: Props) {
   const [catFilter, setCatFilter] = React.useState<string>("all")
   const [search, setSearch] = React.useState<string>("")
 
+
   const filtered = expenses.filter((e) => {
     if (!isWithinRange(e.date, range)) return false
     if (viewFilter !== "all" && e.viewId !== viewFilter) return false
