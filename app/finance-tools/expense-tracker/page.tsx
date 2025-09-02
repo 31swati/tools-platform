@@ -61,21 +61,28 @@ export default function Page() {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <Card>
-        <CardHeader className="flex items-center justify-between">
-        <div className="flex gap-3">
-            {/* Back button */}
+        <CardHeader className="flex flex-col items-center">
+        {/* Top row: Back + Home buttons */}
+        <div className="flex w-full justify-start gap-3">
             <Button variant="outline" onClick={() => router.back()}>
             ← Back
             </Button>
 
-            {/* Home button */}
             <Link href="/">
             <Button variant="outline">🏠 Home</Button>
             </Link>
         </div>
 
-        <CardTitle className="text-2xl font-bold">Expense Tracker</CardTitle>
+        {/* Title styled like a logo */}
+        <CardTitle
+            className="mt-4 text-3xl font-extrabold tracking-wide drop-shadow-md
+                    text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500
+                    px-6 py-2 rounded-full border-4 border-emerald-400 shadow-lg"
+        >
+            Personal Expense Tracker - Online
+        </CardTitle>
         </CardHeader>
+
         <CardContent>
           <div className="flex items-center justify-between gap-4 mb-4">
             <Select

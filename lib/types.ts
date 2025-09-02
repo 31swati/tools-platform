@@ -5,6 +5,7 @@ export type Currency = "USD" | "INR"
 export type ViewProfile = {
   id: string
   name: string
+  isDefault?: boolean
 }
 
 export type Category = {

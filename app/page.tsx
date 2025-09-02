@@ -25,27 +25,27 @@ const toolCategories = [
     href: "/design-tools",
     gradient: "from-purple-500 to-pink-500",
   },
-  {
-    title: "SEO Tools",
-    description: "Keyword research, analytics, and optimization tools",
-    icon: Search,
-    href: "/seo-tools",
-    gradient: "from-orange-500 to-red-500",
-  },
-  {
-    title: "Calculators",
-    description: "Mathematical, scientific, and specialized calculators",
-    icon: Calculator,
-    href: "/calculators",
-    gradient: "from-indigo-500 to-blue-500",
-  },
-  {
-    title: "Productivity Tools",
-    description: "Task management, time tracking, and workflow optimization",
-    icon: Zap,
-    href: "/productivity-tools",
-    gradient: "from-yellow-500 to-orange-500",
-  },
+  // {
+  //   title: "SEO Tools",
+  //   description: "Keyword research, analytics, and optimization tools",
+  //   icon: Search,
+  //   href: "/seo-tools",
+  //   gradient: "from-orange-500 to-red-500",
+  // },
+  // {
+  //   title: "Calculators",
+  //   description: "Mathematical, scientific, and specialized calculators",
+  //   icon: Calculator,
+  //   href: "/calculators",
+  //   gradient: "from-indigo-500 to-blue-500",
+  // },
+  // {
+  //   title: "Productivity Tools",
+  //   description: "Task management, time tracking, and workflow optimization",
+  //   icon: Zap,
+  //   href: "/productivity-tools",
+  //   gradient: "from-yellow-500 to-orange-500",
+  // },
 ]
 
 export default function HomePage() {
@@ -68,6 +68,31 @@ export default function HomePage() {
 
         {/* Tool Categories Grid */}
         <main className="container mx-auto px-6 pb-16">
+          {/* Featured Tool (Beta) */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-center text-emerald-600">
+              Featured Tool (Beta)
+            </h2>
+            <Link href="/finance-tools/expense-tracker">
+              <Card className="max-w-2xl mx-auto transition-all duration-300 hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 border-2 hover:border-accent/50 bg-card/80 backdrop-blur-sm">
+                <CardHeader className="text-center pb-2">
+                  <CardTitle className="font-serif font-black text-xl text-emerald-700">
+                    Expense Tracker - Online
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <img
+                    src="/expense-tracker.png"
+                    alt="Expense Tracker Preview"
+                    className="rounded-lg shadow-md max-h-64 object-cover"
+                  />
+                </CardContent>
+                <CardDescription className="text-center pb-4">
+                  Track your expenses easily — now in beta.
+                </CardDescription>
+              </Card>
+            </Link>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {toolCategories.map((category) => {
               const IconComponent = category.icon
