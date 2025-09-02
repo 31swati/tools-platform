@@ -16,6 +16,7 @@ export const ensureSeedData = () => {
   const existingViews = localStorage.getItem(KEYS.views)
   const existingCats = localStorage.getItem(KEYS.categories)
   const existingSettings = localStorage.getItem(KEYS.settings)
+
   if (!existingViews || !existingCats) {
     const homeId = uuid()
     const personalId = uuid()
