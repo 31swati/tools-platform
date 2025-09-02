@@ -40,6 +40,9 @@
   --sidebar-ring: oklch(0.55 0.15 200 / 0.3);
   --font-open-sans: "Open Sans", sans-serif;
   --font-montserrat: "Montserrat", serif;
+  --radius: 0.75rem;
+  --font-open-sans: "Open Sans", sans-serif;
+  --font-montserrat: "Montserrat", serif;
 }
 
 .dark {
@@ -126,4 +129,13 @@
   body {
     @apply bg-background text-foreground;
   }
+
+button,
+[role="button"],
+select,
+a,
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
 }
