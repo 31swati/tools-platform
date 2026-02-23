@@ -1,26 +1,29 @@
 "use client"
 
 import * as React from "react"
-import { useCategories, useViews, addExpense, updateExpense } from "@/lib/storage"
+import { addExpense, updateExpense } from "@/lib/storage"
 import type { Expense } from "@/lib/types"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
-import { emojiFor } from "@/lib/emoji"
 import { toISODate } from "@/lib/date"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon, Plus } from "lucide-react"
+import { ViewSelect } from "@/components/view-select"
+import { CategorySelect } from "@/components/category-select"
+import { useViews, useCategories } from "@/lib/storage"
 
 type Props = {
   editing?: Expense | null
   onDone?: () => void
+  /** Called when user clicks "+ Add new view/subcategory" so the page can switch tabs */
+  onNavigateToManage?: () => void
 }
 
-export function ExpenseForm({ editing, onDone }: Props) {
+export function ExpenseForm({ editing, onDone, onNavigateToManage }: Props) {
   const { data: views = [] } = useViews()
   const { data: categories = [] } = useCategories()
 
@@ -45,23 +48,49 @@ export function ExpenseForm({ editing, onDone }: Props) {
   }, [editing])
 
   React.useEffect(() => {
-    if (!viewId && views.length > 0) setViewId(views[0].id)
-  }, [views, viewId])
+    if (views.length > 0 && (!viewId || !views.some((v) => v.id === viewId))) {
+      // Prefer last-used view (only when not editing)
+      if (!editing) {
+        const lastView = typeof window !== "undefined" ? localStorage.getItem("et_last_view") : null
+        const valid = lastView && views.some((v) => v.id === lastView)
+        setViewId(valid ? lastView! : views[0].id)
+      } else {
+        setViewId(views[0].id)
+      }
+    }
+  }, [views, viewId, editing])
 
   React.useEffect(() => {
     const cats = categories.filter((c) => c.viewId === viewId)
     if (cats.length > 0 && !cats.some((c) => c.id === categoryId)) {
-      setCategoryId(cats[0].id)
+      // Prefer last-used category for this view (only when not editing)
+      if (!editing) {
+        const lastCat = typeof window !== "undefined" ? localStorage.getItem("et_last_cat") : null
+        const valid = lastCat && cats.some((c) => c.id === lastCat)
+        setCategoryId(valid ? lastCat! : cats[0].id)
+      } else {
+        setCategoryId(cats[0].id)
+      }
     }
-  }, [viewId, categories, categoryId])
+  }, [viewId, categories, categoryId, editing])
 
   const reset = () => {
-    setViewId(views[0]?.id || "")
-    const firstCat = categories.find((c) => c.viewId === views[0]?.id)
-    setCategoryId(firstCat?.id || "")
+    const lastView = typeof window !== "undefined" ? localStorage.getItem("et_last_view") : null
+    const targetViewId = (lastView && views.some((v) => v.id === lastView)) ? lastView : (views[0]?.id || "")
+    setViewId(targetViewId)
+    const cats = categories.filter((c) => c.viewId === targetViewId)
+    const lastCat = typeof window !== "undefined" ? localStorage.getItem("et_last_cat") : null
+    const validCat = lastCat && cats.some((c) => c.id === lastCat)
+    setCategoryId(validCat ? lastCat! : (cats[0]?.id || ""))
     setAmount("")
     setDate(toISODate(new Date()))
     setNote("")
+  }
+
+  const handleAddNew = () => {
+    setOpen(false)
+    onDone?.()
+    onNavigateToManage?.()
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -85,6 +114,11 @@ export function ExpenseForm({ editing, onDone }: Props) {
         date,
         note: note.trim() || undefined,
       })
+      // Remember last-used view + category for next time
+      if (typeof window !== "undefined") {
+        localStorage.setItem("et_last_view", viewId)
+        localStorage.setItem("et_last_cat", categoryId)
+      }
     }
 
     setOpen(false)
@@ -110,36 +144,21 @@ export function ExpenseForm({ editing, onDone }: Props) {
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
             <Label>View</Label>
-            <Select value={viewId} onValueChange={setViewId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a view" />
-              </SelectTrigger>
-              <SelectContent>
-                {views.map((v) => (
-                  <SelectItem key={v.id} value={v.id}>
-                    {v.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ViewSelect
+              value={viewId}
+              onValueChange={setViewId}
+              onAddNew={handleAddNew}
+            />
           </div>
 
           <div className="grid gap-2">
             <Label>Subcategory</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories
-                  .filter((c) => c.viewId === viewId)
-                  .map((c) => (
-                    <SelectItem key={c.id} value={c.id}>
-                      {emojiFor(c.name)} {c.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+            <CategorySelect
+              value={categoryId}
+              onValueChange={setCategoryId}
+              filterByViewId={viewId}
+              onAddNew={handleAddNew}
+            />
           </div>
 
           <div className="grid gap-2">
@@ -177,7 +196,6 @@ export function ExpenseForm({ editing, onDone }: Props) {
                       setDateOpen(false)
                     }
                   }}
-                  initialFocus
                 />
               </PopoverContent>
             </Popover>
